@@ -1,30 +1,79 @@
-# Gator — Blog Aggregator in Go
+# Gator — Go + PostgreSQL Blog Aggregator
 
-A Go + PostgreSQL learning project for building a command-line RSS/blog aggregator.
+A command-line RSS/blog aggregator built as a backend learning project in **Go + PostgreSQL**.
 
-The project covers user registration/login, feed management, periodic feed aggregation, persistence, and browsing stored posts. It was built to strengthen backend fundamentals around Go, SQL, PostgreSQL, CLI design, and data access.
+The project is useful as implementation evidence for backend-oriented technical fluency: CLI command design, persistence, SQL-backed data access, user/feed state, periodic aggregation, and turning external feed data into stored application data.
 
-## Key concepts practiced
+This is a **learning project**, not a production feed platform.
 
-- Go command-line application structure
-- PostgreSQL persistence
-- SQL queries and generated data-access code
-- User and feed state
-- RSS/feed ingestion
-- Periodic aggregation workflows
-- Backend-oriented project organization
+## What this project demonstrates
 
-## Project location
+- Structuring a multi-command Go CLI application
+- Persisting users, feeds, follows, and posts in PostgreSQL
+- Working with SQL-backed data-access code
+- Maintaining application state across commands
+- Fetching and parsing RSS/feed data
+- Running periodic aggregation workflows
+- Separating command orchestration, configuration, database access, and domain behavior
+
+## System flow
+
+```text
+CLI command
+   ↓
+Command handler / application logic
+   ↓
+PostgreSQL queries + persisted state
+   ↑
+RSS feed fetch / aggregation loop
+```
+
+The central product behavior is simple: users register or log in, add/follow feeds, run aggregation, and browse posts that have been fetched and persisted.
+
+## Technical context
+
+- **Language:** Go
+- **Database:** PostgreSQL
+- **Data access:** SQL / PostgreSQL driver
+- **External data:** RSS feeds
+- **Interface:** command-line application
+- **State:** local configuration + persisted database records
+
+## Representative commands
+
+The nested project README contains the full setup and command reference. Representative flows include:
+
+- `register <name>` — create a user
+- `login <name>` — switch the current user
+- `addfeed <name> <url>` — add a feed
+- `agg <duration>` — periodically fetch feeds
+- `browse [limit]` — inspect stored posts
+
+## Repository structure
 
 The implementation lives in:
 
 [`Build_a_Blog_Aggregator_in_Go/`](./Build_a_Blog_Aggregator_in_Go)
 
-The nested README contains setup instructions and available commands.
+That directory contains the Go source, configuration logic, database integration, and detailed run instructions.
 
-## Learning context
+## Why this matters for my product work
 
-This is a **learning project**, not a production feed platform. I use projects like this to build the technical fluency needed to reason about backend systems, persistence, APIs/CLI behavior, and engineering trade-offs as an AI Product Builder / Technical Product Manager candidate.
+I am building technical fluency so I can make better product decisions and communicate with engineering teams with more precision. Gator helps me reason concretely about:
 
-For broader product work, see my Haven portfolio:
-https://somber-tamarillo-df3.notion.site/Haven-AI-native-Product-Portfolio-3d8ad9856018811b96ffe8e33a7d48ef
+- how product state is represented in a database;
+- where application behavior belongs relative to persistence;
+- how periodic/background work differs from request-driven flows;
+- how external data is ingested, transformed, and stored;
+- what constraints appear when a seemingly simple product feature crosses CLI, network, database, and scheduling boundaries.
+
+The signal I intend this repository to provide is **backend-system literacy and implementation practice**, not senior backend-engineering expertise.
+
+## Related evidence
+
+- [`chirpy`](https://github.com/Alan011337/chirpy) — Go HTTP API + PostgreSQL + authentication + webhooks
+- [`build_an_ai_agent`](https://github.com/Alan011337/build_an_ai_agent) — Python tool-using AI agent + function calling
+- [Haven Product Portfolio](https://somber-tamarillo-df3.notion.site/Haven-AI-native-Product-Portfolio-3d8ad9856018811b96ffe8e33a7d48ef) — my flagship AI-native product work
+
+For a curated map of my public technical projects, see:
+[`Alan-Zeng-Git-Hub`](https://github.com/Alan011337/Alan-Zeng-Git-Hub)
