@@ -30,6 +30,17 @@ RSS feed fetch / aggregation loop
 
 The central product behavior is simple: users register or log in, add/follow feeds, run aggregation, and browse posts that have been fetched and persisted.
 
+## Data and state model
+
+A useful way to reason about the system is to separate several kinds of state:
+
+- **Current-user state** — which user the CLI is acting as.
+- **Product state** — users, feeds, follows, and posts persisted in PostgreSQL.
+- **External state** — RSS feeds that can change independently of the application.
+- **Aggregation state** — periodic work that fetches external content and converts it into local product data.
+
+This separation matters because a feature that looks like “show me posts” depends on identity, external-network behavior, persistence, ingestion logic, and timing.
+
 ## Technical context
 
 - **Language:** Go
@@ -57,7 +68,7 @@ The implementation lives in:
 
 That directory contains the Go source, configuration logic, database integration, and detailed run instructions.
 
-## Why this matters for my product work
+## Why this matters for product / technical work
 
 I am building technical fluency so I can make better product decisions and communicate with engineering teams with more precision. Gator helps me reason concretely about:
 
@@ -65,9 +76,27 @@ I am building technical fluency so I can make better product decisions and commu
 - where application behavior belongs relative to persistence;
 - how periodic/background work differs from request-driven flows;
 - how external data is ingested, transformed, and stored;
-- what constraints appear when a seemingly simple product feature crosses CLI, network, database, and scheduling boundaries.
+- what constraints appear when a seemingly simple product feature crosses CLI, network, database, and scheduling boundaries;
+- how stale or failed external data should be distinguished from internal application state.
 
-The signal I intend this repository to provide is **backend-system literacy and implementation practice**, not senior backend-engineering expertise.
+For a Product / TPM context, this is particularly useful for discussing ingestion pipelines, persisted state, background jobs, data freshness, idempotency, and failure boundaries without pretending that a learning project is a production distributed system.
+
+## Reviewer guide
+
+A useful discussion of this repository should be able to answer:
+
+1. Which data should be persisted, and which state can remain local or transient?
+2. What is different about an aggregation loop versus a request-driven API flow?
+3. What can go wrong when external RSS data is fetched repeatedly?
+4. How would you prevent duplicate or stale data from confusing product behavior?
+5. If aggregation stops working, how would you separate network, parsing, database, and scheduling failures?
+6. What would need to change before this could support multiple concurrent users or production reliability expectations?
+
+## Evidence boundary
+
+This repository supports claims about Go application structure, PostgreSQL persistence, SQL-backed state, RSS ingestion, background/periodic workflows, and backend-system reasoning. It does **not** by itself establish production feed-platform ownership, distributed-systems expertise, high-scale concurrency, or production SRE/reliability experience.
+
+The intended signal is **backend-system literacy and implementation practice**, not senior backend-engineering expertise.
 
 ## Related evidence
 
